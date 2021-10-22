@@ -16,18 +16,21 @@ import java.io.IOException;
 public class SortingVisualisation extends PApplet {
 
 float[] values;
-HashMap<Float,Integer> val2index;
+
+BubbleSort bubbleSort;
+SelectionSort selectionSort;
+InsertionSort insertionSort;
+MergeSort mergeSort;
 
 int i = 0;
 int j = 0;
 
 //choose which search algo you want to use:
-final int mode = 2;
+final int mode = 4;
 
  public boolean contains(float[] values, float key){
     for(int i = 0; i<values.length;i++){
         if(values[i] == key){
-            //System.out.println("gugu hi ha mach nomal");
             return true;}
         
     }
@@ -37,27 +40,27 @@ final int mode = 2;
  public void setup() {
     /* size commented out by preprocessor */;
     values = new float[width];
-    float tmp;
+
     for (int i = 0; i < values.length; i++) {
         values[i] = random(height);
     }
-    val2index = new HashMap<Float, Integer>();
+    
+    
+    bubbleSort = new BubbleSort();
+    selectionSort = new SelectionSort();
+    insertionSort = new InsertionSort();
+    mergeSort = new MergeSort();
 
-    for(int i = 0; i<values.length;i++){
-        val2index.put(values[i], i);
-
-    }
-
-    makeHeap(values);
 
 }
 
  public void draw() {
     background(0);
     
-    if (mode == 1) bubbleSort();
-    else if (mode == 2) selecetionSort();
-    else if (mode == 3) insertionSort();
+    if (mode == 1) bubbleSort.bubbleSort();
+    else if (mode == 2) selectionSort.selectionSort();
+    else if (mode == 3) insertionSort.insertionSort();
+    else if (mode == 4) mergeSort.mergeSort();
     
     
     for (int i = 0; i < values.length;i++) {
@@ -69,7 +72,6 @@ final int mode = 2;
 
    //sleep(3000);
 
-
 }
 public static void sleep(int someDelay) {
    try {
@@ -79,114 +81,77 @@ public static void sleep(int someDelay) {
       Thread.currentThread().interrupt();
    }
 }
- public void selecetionSort() {
-    
-    
-    if (i < values.length) {
-        
-        //find maximum
-        
-        //---uncomment next line for linear maximum
-        //int max_index = maximum(values.length-1-i);
-        //--------
-        
-        //---comment next line for linear maximum
-        float max = extractMax();
-        int max_index = findIndex(max);
-        //------------
 
-        //put it at right place
-        val2index.put(values[values.length-i-1], max_index);
-        val2index.put(values[max_index], values.length-i-1);
-        swap(values, values.length-1-i, max_index);
-        i++;
-        
-    } else {
-        println("finished");
-        noLoop();
-    }
-    
-}
+public class BubbleSort{
 
-public int findIndex(float key){
-    return val2index.get(key);
-}
-
-//returns an index, which has to be swapped with the i-th position
- public int maximum(int end) {
-    int max_index =  end;
-    
-    for (int i = 0; i <= end;i++) {
-        if (values[i] > values[max_index]) max_index = i;
-    }
-    
-    return max_index;
-    
-}
- public void bubbleSort() {
-    
-    if (i < values.length) {
+     public void bubbleSort() {
         
-        for (int j = 0; j < values.length - i - 1;j++) {
-            float a = values[j];
-            float b = values[j + 1];
-            if (a > b) {
-                swap(values, j, j + 1);
+        if (i < values.length) {
+            
+            for (int j = 0; j < values.length - i - 1;j++) {
+                float a = values[j];
+                float b = values[j + 1];
+                if (a > b) {
+                    swap(values, j, j + 1);
+                }
             }
+            
+        } else {
+            println("finished");
+            noLoop();
+        }
+    }
+
+     public void swap(float[] arr, int a, int b) {
+        float tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
+    }
+}
+public class InsertionSort{
+     public void insertionSort() {
+        if (i < values.length && i!= 0) {
+            
+            //find right place
+            float key = values[i];
+            int k = binarySearch(values, key, 0, i - 1);
+            
+            //make place by moving all consecutive elements to the right
+            for (int j = i - 1; j >= k; j--) {
+                values[j + 1] = values[j];
+            }
+            
+            values[k] = key;
+            
+            i++;
+            
+        } else if (i == 0) {
+            i++;
+        } else{
+            println("finished");
+            noLoop();
         }
         
-    } else {
-        println("finished");
-        noLoop();
     }
-}
 
- public void swap(float[] arr, int a, int b) {
-    float tmp = arr[a];
-    arr[a] = arr[b];
-    arr[b] = tmp;
-}
- public void insertionSort() {
-    if (i < values.length && i!= 0) {
-        
-        //find right place
-        float key = values[i];
-        int k = binarySearch(values, key, 0, i - 1);
-        
-        //make place by moving all consecutive elements to the right
-        for (int j = i - 1; j >= k; j--) {
-            values[j + 1] = values[j];
+    //returns the index of the insertin spot in the array
+     public int binarySearch(float[] values,float key, int start, int end) {
+        if (start > end) {
+            return start;
         }
+        int mid = start + (end - start) / 2;
+        if (key == values[mid])
+            return mid + 1;
+        if (key > values[mid])
+            return binarySearch(values, key, mid + 1, end);
+        return binarySearch(values, key, start, mid - 1);
         
-        values[k] = key;
-        
-        i++;
-        
-    } else if (i == 0) {
-        i++;
-    } else{
-        println("finished");
-        noLoop();
     }
-    
-}
-
-//returns the index of the insertin spot in the array
- public int binarySearch(float[] values,float key, int start, int end) {
-    if (start > end) {
-        return start;
-    }
-    int mid = start + (end - start) / 2;
-    if (key == values[mid])
-        return mid + 1;
-    if (key > values[mid])
-        return binarySearch(values, key, mid + 1, end);
-    return binarySearch(values, key, start, mid - 1);
-    
 }
 /*--------MaxHeap implementation -------*/
-    private float[] heap;
-	private int size;
+public class MaxHeap{
+    float[] heap = new float[1]; //some random array object
+	int size = 0;
 
 
     public void makeHeap(float[] input){
@@ -279,8 +244,139 @@ public int findIndex(float key){
         }
         }
     }
+}
 
     /*---End of MaxHeap Implementation*/
+class MergeSort{
+    int start = 0;
+    int end = 0;
+
+     public void mergeSort(){
+
+        if(start < end){
+            int mid = (end+start)/2;
+            int tmpend = end;
+            end = mid;
+            
+            //mergeSort();
+
+
+            start = mid+1;
+            end = tmpend;
+            //mergeSort();
+
+            //float[] tmp = merge(start, mid, end);
+            //for(int i = start;i<=end;i++) values[i] = tmp[i-start];
+
+        }
+        return;
+
+        //if (finished) noLoop();
+
+    }
+
+     public float[] merge(int start, int mid, int end){
+        float[] tmp = new float[end-start+1];
+
+        int cnt = 0;
+        int i = start;
+        int j = mid+1;
+
+        while(i<=mid && j <=end){
+
+            if(values[i]<=values[j]){
+                tmp[cnt] = values[i];
+                i++;
+            }else{
+                tmp[cnt] = values[j];
+                j++;
+            }
+            cnt++;
+        }
+
+        for(int k = i; k<=mid;k++){
+            tmp[cnt] = values[k];
+            cnt++;
+        }
+
+        for(int k = j; k<=end;k++){
+            tmp[cnt] = values[k];
+            cnt++;
+        }
+
+        return tmp;
+
+
+
+    }
+}
+public class SelectionSort{
+    HashMap<Float,Integer> val2index;
+    MaxHeap maxHeap = new MaxHeap();
+
+    public SelectionSort(){
+
+        val2index = new HashMap<Float, Integer>();
+
+        for(int i = 0; i<values.length;i++){
+            val2index.put(values[i], i);
+        }
+
+        maxHeap.makeHeap(values);
+
+    }
+
+     public void selectionSort() {
+        
+        
+        if (i < values.length) {
+            
+            //find maximum
+            
+            //---uncomment next line for linear maximum
+            //int max_index = maximum(values.length-1-i);
+            //--------
+            
+            //---comment next line for linear maximum
+            float max = maxHeap.extractMax();
+            int max_index = findIndex(max);
+            //------------
+
+            //put it at right place
+            val2index.put(values[values.length-i-1], max_index);
+            val2index.put(values[max_index], values.length-i-1);
+            swap(values, values.length-1-i, max_index);
+            i++;
+            
+        } else {
+            println("finished");
+            noLoop();
+        }
+        
+    }
+
+     public void swap(float[] arr, int a, int b) {
+        float tmp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = tmp;
+    }
+
+    public int findIndex(float key){
+        return val2index.get(key);
+    }
+
+    //returns an index, which has to be swapped with the i-th position
+     public int maximum(int end) {
+        int max_index =  end;
+        
+        for (int i = 0; i <= end;i++) {
+            if (values[i] > values[max_index]) max_index = i;
+        }
+        
+        return max_index;
+        
+    }
+}
 
 
   public void settings() { size(1000, 600); }

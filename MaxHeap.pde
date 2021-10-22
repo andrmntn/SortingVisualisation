@@ -1,6 +1,7 @@
 /*--------MaxHeap implementation -------*/
-    private float[] heap;
-	private int size;
+public class MaxHeap{
+    float[] heap = new float[1]; //some random array object
+	int size = 0;
 
 
     public void makeHeap(float[] input){
@@ -93,5 +94,6 @@
         }
         }
     }
+}
 
     /*---End of MaxHeap Implementation*/

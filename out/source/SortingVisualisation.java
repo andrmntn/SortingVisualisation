@@ -45,7 +45,8 @@ final int mode = 4;
         values[i] = random(height);
     }
     
-    
+    //values = new float[]{5, 4, 3, 2};
+
     bubbleSort = new BubbleSort();
     selectionSort = new SelectionSort();
     insertionSort = new InsertionSort();
@@ -106,6 +107,21 @@ public class BubbleSort{
         float tmp = arr[a];
         arr[a] = arr[b];
         arr[b] = tmp;
+    }
+}
+public class Indices{
+    int start;
+    int mid;
+    int end;
+
+    public Indices(int start, int mid, int end){
+        this.start = start;
+        this.mid = mid;
+        this.end = end;
+    }
+
+     public String toString(){
+        return "(s: "+start+", m: "+mid+", e: "+end+")";
     }
 }
 public class InsertionSort{
@@ -248,31 +264,50 @@ public class MaxHeap{
 
     /*---End of MaxHeap Implementation*/
 class MergeSort{
-    int start = 0;
-    int end = 0;
+    HashMap<Integer, Indices> list = new HashMap<Integer,Indices>();
 
-     public void mergeSort(){
+    int cnt = 0;
+
+    public MergeSort(){
+        init(0, values.length-1);
+        cnt = 0;
+    }
+
+     public void printMap(){
+        for (int name: list.keySet()) {
+            String key = ""+name;
+            Indices value = list.get(name);
+            System.out.print(key+", ");
+            System.out.print(value.toString());
+            System.out.println();
+        }
+    }
+
+
+     public void init(int start, int end){
 
         if(start < end){
             int mid = (end+start)/2;
-            int tmpend = end;
-            end = mid;
-            
-            //mergeSort();
-
-
-            start = mid+1;
-            end = tmpend;
-            //mergeSort();
-
-            //float[] tmp = merge(start, mid, end);
-            //for(int i = start;i<=end;i++) values[i] = tmp[i-start];
-
+            init(start, mid);
+            init(mid+1, end);
+            list.put(cnt++, new Indices(start, mid, end));
         }
         return;
+    }
 
-        //if (finished) noLoop();
+     public void mergeSort(){
+        if (cnt == list.size()) noLoop();
 
+        Indices entry = list.get(cnt++);
+        int start = entry.start;
+        int mid = entry.mid;
+        int end = entry.end;
+
+        float[] tmp = merge(start, mid, end);
+
+        //edit here if you want nicer visualisation
+
+        for(int i = start;i<=end;i++) values[i] = tmp[i-start];
     }
 
      public float[] merge(int start, int mid, int end){

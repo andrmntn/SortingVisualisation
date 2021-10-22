@@ -28,7 +28,8 @@ void setup() {
         values[i] = random(height);
     }
     
-    
+    //values = new float[]{5, 4, 3, 2};
+
     bubbleSort = new BubbleSort();
     selectionSort = new SelectionSort();
     insertionSort = new InsertionSort();

@@ -40,11 +40,23 @@ void setup() {
 
 void draw() {
     background(0);
+
+    switch (mode) {
+        case 1 :
+            bubbleSort.bubbleSort();
+            break;	
+        case 2 :
+            selectionSort.selectionSort();
+            break;
+        case 3 :
+            insertionSort.insertionSort();
+            break;
+        case 4 :
+            mergeSort.mergeSort();
+            break;			
+    }
     
-    if (mode == 1) bubbleSort.bubbleSort();
-    else if (mode == 2) selectionSort.selectionSort();
-    else if (mode == 3) insertionSort.insertionSort();
-    else if (mode == 4) mergeSort.mergeSort();
+    
     
     
     for (int i = 0; i < values.length;i++) {

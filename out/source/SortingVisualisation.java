@@ -58,8 +58,6 @@ final int mode = 2;
     if (mode == 1) bubbleSort();
     else if (mode == 2) selecetionSort();
     else if (mode == 3) insertionSort();
-
-    
     
     
     for (int i = 0; i < values.length;i++) {
@@ -81,47 +79,6 @@ public static void sleep(int someDelay) {
       Thread.currentThread().interrupt();
    }
 }
-
- public void insertionSort() {
-    if (i < values.length && i!= 0) {
-        
-        //find right place
-        float key = values[i];
-        int k = binarySearch(values, key, 0, i - 1);
-        
-        //make place by moving all consecutive elements to the right
-        for (int j = i - 1; j >= k; j--) {
-            values[j + 1] = values[j];
-        }
-        
-        values[k] = key;
-        
-        i++;
-        
-    } else if (i == 0) {
-        i++;
-    } else{
-        println("finished");
-        noLoop();
-    }
-    
-}
-
-
-//returns the index of the insertin spot in the array
- public int binarySearch(float[] values,float key, int start, int end) {
-    if (start > end) {
-        return start;
-    }
-    int mid = start + (end - start) / 2;
-    if (key == values[mid])
-        return mid + 1;
-    if (key > values[mid])
-        return binarySearch(values, key, mid + 1, end);
-    return binarySearch(values, key, start, mid - 1);
-    
-}
-
  public void selecetionSort() {
     
     
@@ -155,6 +112,17 @@ public int findIndex(float key){
     return val2index.get(key);
 }
 
+//returns an index, which has to be swapped with the i-th position
+ public int maximum(int end) {
+    int max_index =  end;
+    
+    for (int i = 0; i <= end;i++) {
+        if (values[i] > values[max_index]) max_index = i;
+    }
+    
+    return max_index;
+    
+}
  public void bubbleSort() {
     
     if (i < values.length) {
@@ -178,20 +146,44 @@ public int findIndex(float key){
     arr[a] = arr[b];
     arr[b] = tmp;
 }
-
-//returns an index, which has to be swapped with the i-th position
- public int maximum(int end) {
-    int max_index =  end;
-    
-    for (int i = 0; i <= end;i++) {
-        if (values[i] > values[max_index]) max_index = i;
+ public void insertionSort() {
+    if (i < values.length && i!= 0) {
+        
+        //find right place
+        float key = values[i];
+        int k = binarySearch(values, key, 0, i - 1);
+        
+        //make place by moving all consecutive elements to the right
+        for (int j = i - 1; j >= k; j--) {
+            values[j + 1] = values[j];
+        }
+        
+        values[k] = key;
+        
+        i++;
+        
+    } else if (i == 0) {
+        i++;
+    } else{
+        println("finished");
+        noLoop();
     }
-    
-    return max_index;
     
 }
 
-
+//returns the index of the insertin spot in the array
+ public int binarySearch(float[] values,float key, int start, int end) {
+    if (start > end) {
+        return start;
+    }
+    int mid = start + (end - start) / 2;
+    if (key == values[mid])
+        return mid + 1;
+    if (key > values[mid])
+        return binarySearch(values, key, mid + 1, end);
+    return binarySearch(values, key, start, mid - 1);
+    
+}
 /*--------MaxHeap implementation -------*/
     private float[] heap;
 	private int size;
@@ -289,8 +281,6 @@ public int findIndex(float key){
     }
 
     /*---End of MaxHeap Implementation*/
-
-    
 
 
   public void settings() { size(1000, 600); }

@@ -375,15 +375,14 @@ public class QuickSort{
         }
 
         recquickSort(0, values.length-1);
-        printMap();
+        //printMap();
     }
 
      public void quickSort(){
+        realpartition(map.get(i));
+        i++;
 
-        
-        realpartition(map.get(i++));//not finished yet
-        
-        
+        if(i > map.size()-1)noLoop();
     }
 
      public void recquickSort(int low, int high){
@@ -414,10 +413,8 @@ public class QuickSort{
             }
         }
         swap(values, i + 1, high);
-
-
-
     }
+
      public int partition(int low, int high){
 
         float pivot = tmpvalues[high]; 

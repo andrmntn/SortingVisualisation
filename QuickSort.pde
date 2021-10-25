@@ -11,11 +11,14 @@ public class QuickSort{
         }
 
         recquickSort(0, values.length-1);
-        printMap();
+        //printMap();
     }
 
     void quickSort(){
-        realpartition(map.get(i++));
+        realpartition(map.get(i));
+        i++;
+
+        if(i > map.size()-1)noLoop();
     }
 
     void recquickSort(int low, int high){

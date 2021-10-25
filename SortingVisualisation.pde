@@ -4,12 +4,13 @@ BubbleSort bubbleSort;
 SelectionSort selectionSort;
 InsertionSort insertionSort;
 MergeSort mergeSort;
+QuickSort quickSort;
 
 int i = 0;
 int j = 0;
 
 //choose which search algo you want to use:
-final int mode = 4;
+final int mode = 5;
 
 boolean contains(float[] values, float key){
     for(int i = 0; i<values.length;i++){
@@ -34,6 +35,7 @@ void setup() {
     selectionSort = new SelectionSort();
     insertionSort = new InsertionSort();
     mergeSort = new MergeSort();
+    quickSort = new QuickSort();
 
 
 }
@@ -53,6 +55,9 @@ void draw() {
             break;
         case 4 :
             mergeSort.mergeSort();
+            break;
+        case 5 :
+            quickSort.quickSort();
             break;			
     }
     
